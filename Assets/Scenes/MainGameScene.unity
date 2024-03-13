@@ -1731,18 +1731,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44700a3845480064b897cc9ebe1fc0b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDown: 0
   isHold: 0
+  count: 0
   selectedBefore: {fileID: 0}
   selectedCell: {fileID: 0}
-  selectedCells: []
   destroyScheCells: []
   lineSetCells: []
   cellDistance: 1.5
   line: {fileID: 2492571262158394362, guid: 8cf3500f4d50ce141b33a137cadd04fd, type: 3}
   lines: []
-  setDelay: 0.1
-  destroyDelay: 0.025
+  setDelay: 0.01
+  destroyDelay: 0.1
 --- !u!1 &2090372744
 GameObject:
   m_ObjectHideFlags: 0

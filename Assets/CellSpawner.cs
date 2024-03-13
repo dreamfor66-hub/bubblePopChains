@@ -15,11 +15,14 @@ public class CellSpawner : MonoBehaviour
     public Transform pool;
     GameManager gameManager;
 
+    CellPool cellPool;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         borderManager = GetComponentInParent<BorderManager>();
         gameManager = FindObjectOfType<GameManager>();
+        cellPool = FindObjectOfType<CellPool>();
         pool = FindObjectOfType<CellPool>().transform;
         cells = borderManager.cells;
     }
@@ -48,6 +51,7 @@ public class CellSpawner : MonoBehaviour
             randPos *= -1;
         }
         Instantiate(cells[rand], new Vector2(transform.position.x + randPos, transform.position.y - 1f), Quaternion.Euler(new Vector3(0, 0, Random.Range(0, 360))), pool);
+        //cellPool.CellContainer.Add(cells[rand]);
     }
 
 }
