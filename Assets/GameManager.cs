@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -10,13 +12,18 @@ public class GameManager : MonoBehaviour
 
     public List<(int depth, Cell cell, Cell parent)> SelectedCells = new List<(int depth, Cell cell, Cell parent)>();
 
+    public List<int> depths = new();
+    public List<Cell> cells = new();
+    public List<Cell> parents = new();
+
+
     public int count;
     //public List<(int depth, Cell cell, Cell parent)> DestroyScheCells = new List<(int depth, Cell cell, Cell parent)>();
 
 
     public Cell selectedBefore;
     public Cell selectedCell;
-    public List<Cell> destroyScheCells = new List<Cell>(); // now
+    //public List<Cell> destroyScheCells = new List<Cell>(); // now
     public List<Cell> lineSetCells = new List<Cell>();
     public float cellDistance;
 
@@ -28,6 +35,7 @@ public class GameManager : MonoBehaviour
 
     float fixedDeltaTime;
 
+    private HashSet<Cell> visitedCells = new HashSet<Cell>();
     // Start is called before the first frame update
     void Awake()
     {
@@ -38,20 +46,42 @@ public class GameManager : MonoBehaviour
     {
         return isHold || SelectedCells.Count > 0;
     }
+    
+    public bool CanHold()
+    {
+        return SelectedCells.Count == 0;
+    }
 
 
     // Update is called once per frame
     void Update()
     {//인풋
+        depths = new();
+        cells = new();
+        parents = new();
         count = SelectedCells.Count;
-        if (Input.GetMouseButtonDown(0))
+        foreach ((int x, Cell y, Cell z) in SelectedCells)
         {
-            isHold = true;
-            var mousePosition = Input.mousePosition;
-            mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+            depths.Add(x);
+            cells.Add(y);
+            parents.Add(z);
         }
 
-        if (Input.GetMouseButtonUp(0))
+            /////
+        if (Input.GetMouseButtonDown(0) && CanHold())
+        {
+            isHold = true;
+        }
+
+        if (Input.GetMouseButton(0))
+        {
+            if (CanHold() && !isHold)
+            {
+                isHold = true;
+            }
+        }
+
+        if (Input.GetMouseButtonUp(0) && isHold)
         {
             lineSetCells.Clear();
             if (SelectedCells.Count != 0 || isHold)
@@ -59,7 +89,6 @@ public class GameManager : MonoBehaviour
                 if (selectedCell != null)
                 {
                     DestroyChain(0);
-                    //ChainDestroy(0,selectedCell,null);
                 }
             }
             foreach (CellLineRender line in lines)
@@ -86,6 +115,7 @@ public class GameManager : MonoBehaviour
             }
             else if (!hit)
             {
+                selectedCell = null;
                 lineSetCells.Clear();
                 SelectedCells.Clear();
                 foreach (CellLineRender line in lines)
@@ -96,7 +126,7 @@ public class GameManager : MonoBehaviour
                     }
                 }
                 lines.Clear();
-                ChainSet(selectedCell);
+                //ChainSet(selectedCell);
             }
 
             if (selectedBefore != selectedCell)
@@ -115,8 +145,8 @@ public class GameManager : MonoBehaviour
                 ChainSet(selectedCell);
 
                 //지워져야 하는 모든 순서와 연결고리 찾기
-                SelectedCells.Add((0, selectedCell, null));
-                SetSelectedCells(0, selectedCell, null);
+                visitedCells.Clear();
+                SetSelectedCells(selectedCell);
             }
 
             selectedBefore = selectedCell;
@@ -133,9 +163,9 @@ public class GameManager : MonoBehaviour
 
         SelectedCells.RemoveAll(x => x.depth == index);
 
-        foreach ((int depth, Cell cell, Cell parent) in destroyTarget)
+        foreach (var i in destroyTarget)
         {
-            Destroy(cell.gameObject);
+            Destroy(i.cell.gameObject);
         }
         
 
@@ -150,7 +180,6 @@ public class GameManager : MonoBehaviour
 
     void ChainSet(Cell selected)
     {
-        
         foreach (var i in SelectedCells)
         {
             if(!lineSetCells.Contains(i.cell))
@@ -167,6 +196,24 @@ public class GameManager : MonoBehaviour
         }
         
     }
+    
+    void SetChain(int index)
+    {
+        SelectedCells.OrderBy(x => x.depth).ToList();
+        foreach (var i in SelectedCells)
+        {
+            if(!lineSetCells.Contains(i.cell))
+            {
+                lineSetCells.Add(i.cell);
+
+                var addLine = Instantiate(line, i.cell.transform.position, Quaternion.identity);
+                addLine.GetComponent<CellLineRender>().Set(i.cell.transform.position, SelectedCells.Where(x => x.depth == index + 1).FirstOrDefault().cell.transform.position);
+                lines.Add(addLine);
+                StartCoroutine(InvokeSet(i.cell));
+            }
+        }
+        
+    }
     IEnumerator InvokeSet(Cell cell)
     {
         yield return new WaitForSecondsRealtime(setDelay);
@@ -175,43 +222,79 @@ public class GameManager : MonoBehaviour
 
 
 
-
-    void SetSelectedCells(int index, Cell selected, Cell parent)
+    void SetSelectedCells(Cell root)
     {
-        if (selected != null)
+        if (root != null)
         {
-            // 모든 셀을 가져오기. << 진짜? 그래도 됨??? Where로 같은색만 필터해주고 그래야 하지 않을까 우리??
-            var allCells = FindObjectsOfType<Cell>().Where(x => x.color == selected.color).ToList();
+            Queue<(int depth, Cell cell, Cell parent)> queue = new Queue<(int depth, Cell cell, Cell parent)>();
+            //SelectedCells.Add((0, root, null));
 
-            // 이미 선택한 셀이 있다면, 모든 셀을 가져온 지역변수에서 있는 셀 (가능성의 셀)을 빼주기. 등록되지 않은 셀만 남음.
-            //foreach (var i in SelectedCells)
-            //{
-            //    allCells.Remove(i.cell);
-            //}
+            queue.Enqueue((0, root, null));
 
-            //allCells.Remove(selected);
-            //allCells.Remove(parent);
 
-            //var remainedCells = allCells;
-
-            //allCells에 남아있는 등록되지 않은 셀
-            foreach (Cell cell in allCells)
+            //애초에 여길 들어오기 전에 시작점과 인접점의 depth가 둘다 0인데...
+            while (queue.Count > 0)
             {
-                //색상이 맞는지 체크
-                if (cell.color == selected.color)
+                var current = queue.Dequeue();
+                var allCells = Cell.GetCellContainer().Where(x => x.color == current.cell.color).ToList();
+                var remainedCells = new List<Cell>(allCells);
+
+                remainedCells.RemoveAll(x => visitedCells.Contains(x));
+
+                //if (current.depth == 0)
+                //    SelectedCells.Add((current.depth, current.cell, current.cell));
+
+                foreach (Cell cell in remainedCells)
                 {
-                    //selected와 얼마나 거리가 차이나는지를 체크
-                    if (Vector2.Distance(selected.transform.position, cell.transform.position) < cellDistance)
+                    if (Vector2.Distance(current.cell.transform.position, cell.transform.position) < cellDistance)
                     {
-                        //중복체크
-                        if (SelectedCells.Any(x=>x.cell != cell))
-                        {
-                            SelectedCells.Add((index+1, cell, selected));
-                            SetSelectedCells(index+1, cell, selected);
-                        }
+                        visitedCells.Add(cell);
+                        queue.Enqueue((current.depth + 1, cell, current.cell));
+                        if (cell == root)
+                            SelectedCells.Add((current.depth + 0, cell, current.cell));
+                        else
+                            SelectedCells.Add((current.depth + 1, cell, current.cell));
                     }
                 }
             }
         }
     }
+
+    //void SetSelectedCells(int index, Cell selected, Cell parent)
+    //{
+    //    if (selected != null && visitedCells.Add(selected))
+    //    {
+    //        // 모든 셀을 가져오기. << 진짜? 그래도 됨??? Where로 같은색만 필터해주고 그래야 하지 않을까 우리??
+    //        //var allCells = FindObjectsOfType<Cell>().Where(x => x.color == selected.color).ToList();
+    //        var allCells = Cell.GetCellContainer().Where(x => x.color == selected.color).ToList();
+
+    //        var remainedCells = new List<Cell>(allCells);
+
+    //        // 이미 선택한 셀이 있다면, 모든 셀을 가져온 지역변수에서 있는 셀 (가능성의 셀)을 빼주기. 등록되지 않은 셀만 남음.
+    //        //foreach (var i in SelectedCells)
+    //        //{
+    //        //    remainedCells.Remove(i.cell);
+    //        //}
+
+    //        remainedCells.RemoveAll(x => SelectedCells.Any(y => y.cell == x));
+
+    //        //remainedCells.Remove(selected);
+    //        //remainedCells.Remove(parent);
+
+
+    //        //allCells에 남아있는 등록되지 않은 셀
+    //        foreach (Cell cell in remainedCells)
+    //        {
+    //            //selected와 얼마나 거리가 차이나는지를 체크
+    //            if (Vector2.Distance(selected.transform.position, cell.transform.position) < cellDistance)
+    //            {
+    //                if (index >= SelectedCells.Last().depth)
+    //                {
+    //                    SelectedCells.Add((index+1, cell, selected));
+    //                    SetSelectedCells(index+1, cell, selected);
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
 }

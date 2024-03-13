@@ -14,4 +14,23 @@ public enum CellColor
 public class Cell : MonoBehaviour
 {
     public CellColor color;
+
+    public static List<Cell> CellContainer = new();
+
+    public static List<Cell> GetCellContainer()
+    {
+        return CellContainer;
+    }
+
+
+    void Awake()
+    {
+        CellContainer.Add(this);
+    }
+
+    private void OnDestroy()
+    {
+        CellContainer.Remove(this);
+    }
+
 }
