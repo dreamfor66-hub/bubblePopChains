@@ -12,10 +12,15 @@ public class CellSpawner : MonoBehaviour
 
     BorderManager borderManager;
 
+    public Transform pool;
+    GameManager gameManager;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         borderManager = GetComponentInParent<BorderManager>();
+        gameManager = FindObjectOfType<GameManager>();
+        pool = FindObjectOfType<CellPool>().transform;
         cells = borderManager.cells;
     }
 
@@ -32,7 +37,17 @@ public class CellSpawner : MonoBehaviour
     public void RandomSpawn()
     {
         var rand = Random.Range(0, 5);
-        Instantiate(cells[rand], new Vector2(transform.position.x, transform.position.y -1f), Quaternion.Euler(new Vector3(0, 0, Random.Range(0, 360))));
+        var isMinus = Random.Range(0, 2); //1이면 양수 0이면 음수
+        float randPos = (float)Random.Range(1, 100)/100; //Tofloat
+        if (isMinus == 0)
+        {
+            randPos *= 1;
+        }
+        else if (isMinus == 1)
+        {
+            randPos *= -1;
+        }
+        Instantiate(cells[rand], new Vector2(transform.position.x + randPos, transform.position.y - 1f), Quaternion.Euler(new Vector3(0, 0, Random.Range(0, 360))), pool);
     }
 
 }
