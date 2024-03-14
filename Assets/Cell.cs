@@ -15,6 +15,8 @@ public class Cell : MonoBehaviour
 {
     public CellColor color;
 
+    public DestroyableObject destroyVfx;
+
     public static List<Cell> CellContainer = new();
 
     public static List<Cell> GetCellContainer()
@@ -30,6 +32,7 @@ public class Cell : MonoBehaviour
 
     private void OnDestroy()
     {
+        Instantiate(destroyVfx, this.transform.position, Quaternion.identity);
         CellContainer.Remove(this);
     }
 

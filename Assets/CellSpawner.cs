@@ -24,7 +24,7 @@ public class CellSpawner : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
         cellPool = FindObjectOfType<CellPool>();
         pool = FindObjectOfType<CellPool>().transform;
-        cells = borderManager.cells;
+        cells = borderManager.GetCells();
     }
 
     // Update is called once per frame
