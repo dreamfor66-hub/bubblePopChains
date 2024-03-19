@@ -19,7 +19,7 @@ public class MonsterInWave
     public Monster monster;
     [HorizontalGroup]
     [LabelText("")]
-    public int monsterAmount;
+    public int amount;
 }
 
 public class StageManager : MonoBehaviour
@@ -38,4 +38,5 @@ public class StageManager : MonoBehaviour
     {
         
     }
+
 }

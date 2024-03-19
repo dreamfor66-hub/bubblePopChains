@@ -197,7 +197,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.46666667}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.52156866}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1803,21 +1803,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Waves:
   - monsters:
-    - monster: {fileID: 0}
-      monsterAmount: 0
-    nextWaveTime: 0
-  - monsters:
-    - monster: {fileID: 0}
-      monsterAmount: 0
-    nextWaveTime: 0
-  - monsters:
-    - monster: {fileID: 0}
-      monsterAmount: 0
-    nextWaveTime: 0
-  - monsters: []
-    nextWaveTime: 0
-  - monsters: []
-    nextWaveTime: 0
+    - monster: {fileID: 4114256487116760809, guid: 8c1a27fd8c7a0ed4ab05a827690f7918, type: 3}
+      amount: 3
+    nextWaveTime: 3
   - monsters: []
     nextWaveTime: 0
 --- !u!4 &1835823566
@@ -2176,8 +2164,8 @@ MonoBehaviour:
   - {fileID: 77251429933948582, guid: 2be1b1adcc4362b4c98f854f78298c4e, type: 3}
   - {fileID: 7758249634592109576, guid: 362f71c268484bf4e9a96f50cb770f88, type: 3}
   - {fileID: 6156652004458643942, guid: 5db69cca56f8d704199cf7fc2042341a, type: 3}
-  - {fileID: -6220734734099904618, guid: 2ca70227d3322cc42a62b5a1557cee1c, type: 3}
   - {fileID: -8749329628197569037, guid: d34e40e38a63a384ca53f6567b2ff7e7, type: 3}
+  - {fileID: -6220734734099904618, guid: 2ca70227d3322cc42a62b5a1557cee1c, type: 3}
 --- !u!1001 &5582467848481634486
 PrefabInstance:
   m_ObjectHideFlags: 0
