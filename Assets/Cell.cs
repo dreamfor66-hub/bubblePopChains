@@ -10,10 +10,20 @@ public enum CellColor
     yellow = 3,
     green = 4,
 }
+public enum CellType
+{
+    normal = 0,
+    bomb = 1,
+}
 
 public class Cell : MonoBehaviour
 {
     public CellColor color;
+    public CellType type;
+
+    [HideInInspector] public float destroyRange;
+
+    [HideInInspector] public bool destroyReady = false; 
 
     public DestroyableObject destroyVfx;
 
@@ -28,11 +38,13 @@ public class Cell : MonoBehaviour
     void Awake()
     {
         CellContainer.Add(this);
+        destroyReady = false;
     }
 
     private void OnDestroy()
     {
-        Instantiate(destroyVfx, this.transform.position, Quaternion.identity);
+        if (destroyVfx != null)
+            Instantiate(destroyVfx, this.transform.position, Quaternion.identity);
         CellContainer.Remove(this);
     }
 

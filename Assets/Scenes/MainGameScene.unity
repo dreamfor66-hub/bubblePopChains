@@ -197,7 +197,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.46666667}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.46666667}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1772,6 +1772,69 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6605966330887455851, guid: f2e525ca7648bf944b845aed415e7add, type: 3}
   m_PrefabInstance: {fileID: 5582467848481634486}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1835823564
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1835823566}
+  - component: {fileID: 1835823565}
+  m_Layer: 0
+  m_Name: StageManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1835823565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835823564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c65c05082fa60c24c8ed4fa0904926a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Waves:
+  - monsters:
+    - monster: {fileID: 0}
+      monsterAmount: 0
+    nextWaveTime: 0
+  - monsters:
+    - monster: {fileID: 0}
+      monsterAmount: 0
+    nextWaveTime: 0
+  - monsters:
+    - monster: {fileID: 0}
+      monsterAmount: 0
+    nextWaveTime: 0
+  - monsters: []
+    nextWaveTime: 0
+  - monsters: []
+    nextWaveTime: 0
+  - monsters: []
+    nextWaveTime: 0
+--- !u!4 &1835823566
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835823564}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1843169708
 GameObject:
   m_ObjectHideFlags: 0
@@ -2043,8 +2106,18 @@ MonoBehaviour:
   cellNumber: {fileID: 5696908218868986305, guid: f2e525ca7648bf944b845aed415e7add, type: 3}
   setDelay: 0.05
   destroyDelay: 0.2
+  bombDestroyBombDelay: 1.25
   cellDistance: 1.5
-  bomb: {fileID: 786593742239364404, guid: 36b2c0ebeb52a8f4599e564ef6daa726, type: 3}
+  bombDistance: 1.7
+  bombDistanceIncrement: 0.2
+  bombScaleIncrement: 0.1
+  bombs:
+  - {fileID: -2167548539689272520, guid: bdc0744a24277d74fb632284140b2ca3, type: 3}
+  - {fileID: -2167548539689272520, guid: 3554f2733d432104699932d93e187a52, type: 3}
+  - {fileID: -2167548539689272520, guid: e399a62b5d5977d47aa7d0df67246500, type: 3}
+  - {fileID: -2167548539689272520, guid: 36b2c0ebeb52a8f4599e564ef6daa726, type: 3}
+  - {fileID: -2167548539689272520, guid: 2f11a91c35948fe41810578a608bd4a6, type: 3}
+  bomb: {fileID: -2167548539689272520, guid: 36b2c0ebeb52a8f4599e564ef6daa726, type: 3}
 --- !u!1 &2090372744
 GameObject:
   m_ObjectHideFlags: 0
@@ -2216,3 +2289,4 @@ SceneRoots:
   - {fileID: 1913942070}
   - {fileID: 1335003031}
   - {fileID: 790106634}
+  - {fileID: 1835823566}

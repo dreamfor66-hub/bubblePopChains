@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4674936860517388965}
   - component: {fileID: -2167548539689272520}
   m_Layer: 0
-  m_Name: PF_Bomb_White
+  m_Name: PF_Bomb_Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: fea7f89ce2b07de4f85e373d08eb4e44, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.40566033, b: 0.41928807, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -161,6 +161,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df95db6df4dd1424f94f580a303a9938, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 0
+  color: 1
   type: 1
+  destroyRange: 0
+  destroyReady: 0
   destroyVfx: {fileID: 0}

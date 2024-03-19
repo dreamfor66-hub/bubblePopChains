@@ -50,7 +50,7 @@ public class CellSpawner : MonoBehaviour
         {
             randPos *= -1;
         }
-        Instantiate(cells[rand], new Vector2(transform.position.x + randPos, transform.position.y - 1f), Quaternion.Euler(new Vector3(0, 0, Random.Range(0, 360))), pool);
+        Instantiate(cells[rand], new Vector2(transform.position.x + randPos, transform.position.y - .5f), Quaternion.Euler(new Vector3(0, 0, Random.Range(0, 360))), pool);
         //cellPool.CellContainer.Add(cells[rand]);
     }
 
