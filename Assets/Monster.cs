@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum MonsterType
-{
-    normal = 0,
-}
-
 public class Monster : MonoBehaviour
 {
     public MonsterType type;
+    public MonsterData data;
 
     public static List<Monster> MonsterContainer = new();
 

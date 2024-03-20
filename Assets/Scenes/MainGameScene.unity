@@ -1836,7 +1836,7 @@ Transform:
   m_GameObject: {fileID: 1659602314}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.05}
+  m_LocalPosition: {x: 0, y: 0, z: -0.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2171,7 +2171,7 @@ MonoBehaviour:
   cellNumber: {fileID: 5696908218868986305, guid: f2e525ca7648bf944b845aed415e7add, type: 3}
   setDelay: 0.05
   destroyDelay: 0.2
-  bombDestroyBombDelay: 1.25
+  bombDestroyBombDelay: 1.2
   cellDistance: 1.5
   bombDistance: 1.7
   bombDistanceIncrement: 0.2
@@ -2202,7 +2202,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2066489939
 Transform:
   m_ObjectHideFlags: 0

@@ -46,7 +46,7 @@ public class MonsterSpawner : MonoBehaviour
             {
                 randPos *= -1;
             }
-            Instantiate(monsters[rand], new Vector2(transform.position.x + randPos, transform.position.y), Quaternion.Euler(new Vector3(0, 0, Random.Range(0, 360))), pool);
+            Instantiate(monsters[rand], new Vector3(transform.position.x + randPos, transform.position.y, -0.1f), Quaternion.Euler(new Vector3(0, 0, Random.Range(0, 360))), pool);
             yield return new WaitForSeconds(1f);
         }
         

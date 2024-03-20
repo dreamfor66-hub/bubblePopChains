@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
 
     public List<(int depth, Cell cell, Cell parent)> SelectedCells = new List<(int depth, Cell cell, Cell parent)>();
 
+
     //public List<int> depths = new();
     //public List<Cell> cells = new();
     //public List<Cell> parents = new();
@@ -40,7 +41,8 @@ public class GameManager : MonoBehaviour
     public float bombDistance;
     public float bombDistanceIncrement;
     public float bombScaleIncrement;
-    bool destroyClear = true;
+    bool chainDestroyClear = true;
+    bool delayedBombClear = true;
 
     float fixedDeltaTime;
 
@@ -59,7 +61,7 @@ public class GameManager : MonoBehaviour
 
     public bool IsTimeStopped()
     {
-        return isHold || !destroyClear || SelectedCells.Count > 0;
+        return isHold || !chainDestroyClear || SelectedCells.Count > 0;
     }
     
     public bool CanHold()
@@ -67,17 +69,22 @@ public class GameManager : MonoBehaviour
         return SelectedCells.Count == 0;
     }
 
+    public bool CanPlay()
+    {
+        return !IsTimeStopped() && delayedBombClear;
+    }
+
 
     // Update is called once per frame
     void Update()
     {//인풋
             /////
-        if (Input.GetMouseButtonDown(0) && CanHold())
+        if (Input.GetMouseButtonDown(0) && CanHold() && CanPlay())
         {
             isHold = true;
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && CanPlay())
         {
             if (CanHold() && !isHold)
             {
@@ -170,7 +177,14 @@ public class GameManager : MonoBehaviour
                     SetChain(0);
                 }
                 else if (selectedCell.type == CellType.bomb)
+                {
                     SetBombDestroyTarget(selectedCell);
+                    foreach (var i in SelectedCells)
+                    {
+                        drawScheCells.Add(i.cell);
+                    }
+                    SetChain(0);
+                }
 
                 //drawSheCells는 이제, 선택된(line을 그려야할) 모든 셀을 의미한다.
                 
@@ -184,15 +198,16 @@ public class GameManager : MonoBehaviour
 
     IEnumerator DestoyChain(Cell root)
     {
-        destroyClear = false;
+        chainDestroyClear = false;
         var index = 0;
         var destroyCount = 0;
         var isBombDestroyBomb = false;
         var bombVector = new Vector2();
         var bombColor = new CellColor();
+
         while (SelectedCells.Count > 0)
         {
-            var destroyTarget = SelectedCells.Where(x => x.depth == index).ToList();
+            var destroyTarget = SelectedCells.Where(x => x.depth == index && (!x.cell.destroyReady || root)).ToList();
 
             SelectedCells.RemoveAll(x => x.depth == index);
 
@@ -201,6 +216,7 @@ public class GameManager : MonoBehaviour
                 destroyCount += 1;
                 bombVector = i.cell.transform.position;
                 bombColor = i.cell.color;
+
                 if (i.cell.type == CellType.normal || i.cell == root)
                 { 
                     Destroy(i.cell.gameObject);
@@ -218,18 +234,18 @@ public class GameManager : MonoBehaviour
 
         if (destroyCount >= 5 && root.type != CellType.bomb)
         {
-            destroyClear = false;
             CreateBomb(bombVector, destroyCount, bombColor);
             yield return new WaitForSecondsRealtime(destroyDelay);
-            destroyClear = true;
         }
 
         if (isBombDestroyBomb)
         {
+            delayedBombClear = false;
+            StopCoroutine("DelayedBombDestroy");
             StartCoroutine(DelayedBombDestroy());
         }
 
-        destroyClear = true;
+        chainDestroyClear = true;
     }
 
 
@@ -344,13 +360,18 @@ public class GameManager : MonoBehaviour
     {
         var allDelayBomb = Cell.GetCellContainer().Where(x => x.type == CellType.bomb && x.destroyReady == true).ToList();
 
-        var i = 0;
+
         while (allDelayBomb.Count > 0)
         {
-            yield return new WaitForSecondsRealtime(bombDestroyBombDelay);
-            SetBombDestroyTarget(allDelayBomb[i]);
-            StartCoroutine(DestoyChain(allDelayBomb[i]));
-            i += 1;
+            yield return new WaitForSeconds(bombDestroyBombDelay);
+            SetBombDestroyTarget(allDelayBomb[0]);
+            StartCoroutine(DestoyChain(allDelayBomb[0]));
+            allDelayBomb.Remove(allDelayBomb[0]);
         }
+
+        yield return new WaitForSeconds(.1f);
+        delayedBombClear = true;
     }
+
+    
 }
