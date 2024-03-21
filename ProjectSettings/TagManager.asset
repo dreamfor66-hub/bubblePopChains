@@ -41,3 +41,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Monster
+    uniqueID: 566747971
+    locked: 0
+  - name: Bullet
+    uniqueID: 821231517
+    locked: 0
+  - name: UI
+    uniqueID: 4195155201
+    locked: 0
+  - name: Fx
+    uniqueID: 3270968299
+    locked: 0

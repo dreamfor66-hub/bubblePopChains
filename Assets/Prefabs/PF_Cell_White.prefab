@@ -76,8 +76,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2135585597343286014, guid: 5aa8b770bc43046bc8d993d0d5b7f4a5, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: f56b73e3a9173a14780b9d64198072ed, type: 3}
+  m_Color: {r: 1, g: 0.7830188, b: 0.8643539, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -127,6 +127,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 0
+  type: 0
+  destroyRange: 0
+  destroyReady: 0
   destroyVfx: {fileID: -4665900342053956459, guid: dfb6d73f82593b045a4a587a4a050996, type: 3}
 --- !u!58 &-899422936600940009
 CircleCollider2D:

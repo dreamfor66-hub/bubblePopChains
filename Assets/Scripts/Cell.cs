@@ -43,9 +43,13 @@ public class Cell : MonoBehaviour
 
     private void OnDestroy()
     {
+        CellContainer.Remove(this);
+    }
+
+    public void DestroyFx()
+    {
         if (destroyVfx != null)
             Instantiate(destroyVfx, this.transform.position, Quaternion.identity);
-        CellContainer.Remove(this);
     }
 
 }
